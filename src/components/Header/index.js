@@ -10,6 +10,7 @@ function Header(){
 
     const navigate=useNavigate();
     const [isLoggedIn, setIsLoggedIn]=useState(false);
+    const [userType, setUserType]=useState('client');
 
     function logout(){
         // if (JSON.parse(localStorage.getItem('loggedIn'))===false){alert('You have not logged in')}
@@ -23,7 +24,7 @@ function Header(){
     
     useEffect(()=>{
         setIsLoggedIn(JSON.parse(localStorage.getItem('loggedIn')));
-
+        setIsLoggedIn(JSON.parse(localStorage.getItem('user')));
     },[isLoggedIn])
     
     return (
@@ -48,16 +49,16 @@ function Header(){
              <Link className="nav-link" to="/update-account">
                 <p>Update Account</p>
              </Link>
-             <Link className="nav-link" to="doctors">
+             <Link className="nav-link" to="/book-appointment">
                 <p>Book Appointment</p>
              </Link>
              <Link className="nav-link" to="/appointments">
                 <p>Appointments</p>
              </Link>
-             <Link className="nav-link" to='all-doctors'>
+             <Link className="nav-link" to='/all-doctors'>
                 <p>Doctor Database</p>
              </Link>
-             <Link className="nav-link" to="all-clients">
+             <Link className="nav-link" to="/all-clients">
                 <p>Client Database</p> 
              </Link>
             </div>

@@ -3,9 +3,10 @@ import displayAppointmentsService from '../../services/AppointmentsService';
 import fetchAccountDetailsService from '../../services/FetchAccountDetailsService';
 
 const Appointments = () => {
-    const [client, setClient] = useState(null); 
-    const [doctor, setDoctor] = useState(null); 
+  const [client, setClient] = useState(null); 
+  const [doctor, setDoctor] = useState(null); 
   const [appointments, setAppointments] = useState([]);
+  const[selectedAppointmentId, setSelectedAppointmentId] = useState(null);
   const [userType, setUserType] = useState("client")
   const [searchInput, setSearchInput] = useState(new Date());
   const [error, setError] = useState('');
@@ -39,7 +40,8 @@ const Appointments = () => {
   };
 
 
-  function fetchAdditionalDetails(clientId,doctorId){
+  function fetchAdditionalDetails(clientId,doctorId,appointmentId) {
+        setSelectedAppointmentId(appointmentId);
         setCount(count+1)
         if (count%2===0){
         if(userType === 'client'){
@@ -133,22 +135,24 @@ const Appointments = () => {
                         <td>{appointment.appointmentDate}</td>
                         <td>{appointment.appointmentSlot}</td>
                         {/* {(userType==='client') && <td>{appointment.doctor.consultancyFee}</td>} */}
-                        <td><button className='btn btn-primary' onClick={()=>{fetchAdditionalDetails(appointment.clientID,appointment.doctorID)}} >Show More Details</button></td>
-                        {client!==null && doctor!==null && <td>
+                        <td><button className='btn btn-primary' onClick={()=>{fetchAdditionalDetails(appointment.clientID,appointment.doctorID,appointment.id)}} >Show More Details</button></td>
+                        {client!==null && doctor!==null && appointment.id===selectedAppointmentId && <td>
                            <span>Patient's Name : {client.name}</span><br/>
                            <span>Doctor's Name : {doctor.name}</span><br/>
                             </td>}
-                        {client!==null && doctor===null && <td>
+                        {client!==null && doctor===null && appointment.id===selectedAppointmentId && <td>
                            <span>Patient's Name : {client.name}</span><br/>
                            <span>Patient's Age : {client.age}</span><br/>
                             </td>}
-                        {client===null && doctor!==null && <td>
+                        {client===null && doctor!==null && appointment.id===selectedAppointmentId && <td>
                            <span>Doctor's Name : {doctor.name}</span><br/>
                            <span>Doctor's Specialization : {doctor.specialization}</span><br/>
                            <span>Doctor's Experience: {doctor.experience}</span><br/>
                            <span>Doctor's Consultancy Fee: {doctor.consultancyFee}</span><br/>
                             </td>}
+                            
                     </tr>
+                    
                     ))}
                 </tbody>
             </table>
