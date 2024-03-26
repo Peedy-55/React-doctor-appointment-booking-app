@@ -8,7 +8,8 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const[selectedAppointmentId, setSelectedAppointmentId] = useState(null);
   const [userType, setUserType] = useState("client")
-  const [searchInput, setSearchInput] = useState(new Date());
+  const [searchInput, setSearchInput] = useState("");
+
   const [error, setError] = useState('');
   const [count, setCount] = useState(0);
 
@@ -21,20 +22,29 @@ const Appointments = () => {
     //   console.log(userType,userId)
     //   console.log()
       
-      // Call the service to get appointments
+     
       displayAppointmentsService.getAppointments(userType, userId)
         .then(data => {
           console.log(data, typeof(data));
-          setAppointments(data.data);
+          const filteredAppointments = data.data.filter(appointment => {
+            return appointment.appointmentDate === searchInput;
+          });
+          if(searchInput===""){
+            setAppointments(data.data);
+          }else{
+            setAppointments(filteredAppointments);
+          }
+        //   setAppointments(filteredAppointments);
+          
         })
         .catch(err => {
           console.error(err);
           setError(err.message || 'Failed to load appointments');
         });
     }
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [searchInput]); 
+  
 
-  // Handler for search input change, assuming you want to search/filter appointments
   const handleSearchInputChange = (event) => {
     setSearchInput(event.target.value);
   };
@@ -104,7 +114,7 @@ const Appointments = () => {
       {error && <p>Error: {error}</p>}
       <input
         type="date"
-        value={searchInput.toISOString().substring(0, 10)}
+        value={searchInput}
         onChange={handleSearchInputChange}
       />
         <div className="container p-5">

@@ -23,6 +23,23 @@ function Update (){
     const [error, setError] = useState("");
     const [businessLogicError, setBusinessLogicError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const specializationsDictionary = {
+        cardiology: 'Cardiology',
+        dermatology: 'Dermatology',
+        neurology: 'Neurology',
+        pediatrics: 'Pediatrics',
+        psychiatry: 'Psychiatry',
+        orthopedics: 'Orthopedics',
+        ophthalmology: 'Ophthalmology',
+        dentistry: 'Dentistry',
+        gynecology: 'Gynecology',
+        gastroenterology: 'Gastroenterology',
+        immunology: 'Immunology',
+        nephrology: 'Nephrology',
+        endocrinology:'Endocrinology',
+        hepatologist: 'Hepatologist',
+        oncology: 'Oncology',
+      };
     
     const navigate = useNavigate();
 
@@ -196,7 +213,12 @@ function Update (){
         </div> */}
         
         <label className="form-label" htmlFor="specialization2">Specialization</label><br/>
-        <input className="form-control" onChange={handleDoctorChange} type="text" id="specialization2" name="specialization" value={doctor.specialization} placeholder="Enter your Valid specialization" required pattern="^[a-zA-Z]{3,20}$" title="Please enter a Valid Specialisation, between 3-20 characters in length"/><br/>
+        {/* <input className="form-control" onChange={handleDoctorChange} type="text" id="specialization2" name="specialization" value={doctor.specialization} placeholder="Enter your Valid specialization" required pattern="^[a-zA-Z]{3,20}$" title="Please enter a Valid Specialisation, between 3-20 characters in length"/><br/> */}
+        <select className='form-control' id="specialization" name="specialization" onChange={handleDoctorChange}>
+        {Object.entries(specializationsDictionary).map(([key, value]) => (
+        <option key={key} value={value}>{value}</option>
+    ))}
+        </select><br/>
         
         {/* // <div *ngIf="specializationRef.invalid && (specializationRef.touched || specializationRef.dirty)">
         //     <p *ngIf="specializationRef.errors?.['required']" className="text-danger">Specialization cannnot be blank</p>

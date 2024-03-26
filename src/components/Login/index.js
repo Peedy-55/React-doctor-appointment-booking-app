@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 //import { useHistory } from 'react-router-dom'; 
 import loginService from '../../services/LoginService';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 
 
 function Login() {
@@ -17,8 +17,8 @@ function Login() {
     
   //  const history = useHistory();
   
-    const loginUser = (e) => {
-        // e.preventDefault();
+    const loginUser = async(e) => {
+        //e.preventDefault();
         loginService.loginUser(userCredentials,userType)
         .then(data => {
           console.log(data);
@@ -27,13 +27,13 @@ function Login() {
           setData(data);
           localStorage.setItem("user", JSON.stringify({id:data.data.id,name:data.data.name,type:userType,email:data.data.email,password:data.data.password}));
           localStorage.setItem("loggedIn",true)
+          
           setTimeout(() => {
             setSuccessMessage("");
             setBusinessLogicError("")
+            //navigate('/homess')
           }, 3000);
-          navigate('/login')
-//          Navigate to another route if needed
-//          history.push('/login');
+  
         })
         .catch(err => {
             console.log(err)
@@ -48,6 +48,33 @@ function Login() {
           
           console.log(err);
         });
+
+
+        // try {
+        //     const data = await loginService.loginUser(userCredentials, userType);
+        //     console.log(data);
+        //     setBusinessLogicError("");
+        //     const successMessage = userType === 'client' ? 'Patient account logged in successfully!' : `${userType[0].toUpperCase() + userType.slice(1)} account logged in successfully!`;
+        //     setSuccessMessage(successMessage);
+        //     setData(data);
+        //     localStorage.setItem("user", JSON.stringify({ id: data.data.id, name: data.data.name, type: userType, email: data.data.email, password: data.data.password }));
+        //     localStorage.setItem("loggedIn", true);
+        //     setTimeout(() => {
+        //     setSuccessMessage("");
+        //     setBusinessLogicError("");
+        //     navigate('/home'); // Adjust the route as necessary
+        //     }, 3000);
+        // } catch (err) {
+        //     console.error(err);
+        //     if (typeof(err.response?.data) === "string") {
+        //     setBusinessLogicError(err.response.data);
+        //     }
+        //     setSuccessMessage("");
+        //     setTimeout(() => {
+        //     setSuccessMessage("");
+        //     setBusinessLogicError("");
+        //     }, 3000);
+        // }
     };
   
     const handleCredentialChange = (e) => {
@@ -61,6 +88,8 @@ function Login() {
         console.log(e.target.value);
         setUserType(e.target.value)
     }
+
+    
 
     return(
             <div className="container d-flex flex-column justify-content-center p-5 w-75">

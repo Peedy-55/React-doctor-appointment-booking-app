@@ -5,7 +5,7 @@ import registrationService from '../../services/RegistrationService';
 
 
 function Register (){
-
+    
     const [userType, setUserType] = useState("client");
     const [client, setClient] = useState({}); 
     const [doctor, setDoctor] = useState({}); 
@@ -13,7 +13,24 @@ function Register (){
     const [error, setError] = useState("");
     const [businessLogicError, setBusinessLogicError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
-    
+    const specializationsDictionary = {
+        select: 'Select',
+        immunology: 'Immunology',
+        dermatology: 'Dermatology',
+        neurology: 'Neurology',
+        pediatrics: 'Pediatrics',
+        psychiatry: 'Psychiatry',
+        orthopedics: 'Orthopedics',
+        ophthalmology: 'Ophthalmology',
+        dentistry: 'Dentistry',
+        gynecology: 'Gynecology',
+        gastroenterology: 'Gastroenterology',
+        nephrology: 'Nephrology',
+        cardiology: 'Cardiology',
+        endocrinology:'Endocrinology',
+        hepatologist: 'Hepatologist',
+        oncology: 'Oncology',
+      };
     const navigate = useNavigate();
   
     const registerClient = (e) => {
@@ -24,6 +41,7 @@ function Register (){
           setBusinessLogicError("");
           setSuccessMessage("Patient Account registered successfully! Redirecting to Login Page...");
           setData(data);
+          localStorage.setItem('loggedIn', false)
           setTimeout(() => {
             navigate('/login');
           }, 3000);      
@@ -45,13 +63,14 @@ function Register (){
     }
   
     const registerDoctor = (e) => {
-        e.preventDefault();
+       e.preventDefault();
       registrationService.registerDoctor(doctor)
         .then(data => {
           console.log(data);
           setBusinessLogicError("");
           setSuccessMessage("Doctor Account registered successfully! Redirecting to Login Page...");
           setData(data);
+          localStorage.setItem('loggedIn', false)
           setTimeout(() => {
             navigate('/login');
           }, 3000);
@@ -163,7 +182,12 @@ function Register (){
         </div> */}
         
         <label className="form-label" htmlFor="specialization2">Specialization</label><br/>
-        <input className="form-control" onChange={handleDoctorChange} type="text" id="specialization2" name="specialization" placeholder="Enter your Valid specialization" required pattern="^[a-zA-Z]{3,20}$" title="Please enter a Valid Specialisation, between 3-20 characters in length"/><br/>
+        {/* <input className="form-control" onChange={handleDoctorChange} type="text" id="specialization2" name="specialization" placeholder="Enter your Valid specialization" required pattern="^[a-zA-Z]{3,20}$" title="Please enter a Valid Specialisation, between 3-20 characters in length"/><br/> */}
+        <select className='form-control' id="specialization" name="specialization" onChange={handleDoctorChange}>
+        {Object.entries(specializationsDictionary).map(([key, value]) => (
+        <option key={key} value={value}>{value}</option>
+    ))}
+        </select><br/>
         
         {/* // <div *ngIf="specializationRef.invalid && (specializationRef.touched || specializationRef.dirty)">
         //     <p *ngIf="specializationRef.errors?.['required']" className="text-danger">Specialization cannnot be blank</p>

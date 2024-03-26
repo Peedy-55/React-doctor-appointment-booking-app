@@ -10,7 +10,7 @@ function Header(){
 
     const navigate=useNavigate();
     const [isLoggedIn, setIsLoggedIn]=useState(false);
-    const [userType, setUserType]=useState('client');
+    const [userType, setUserType]=useState('doctor');
 
     function logout(){
         // if (JSON.parse(localStorage.getItem('loggedIn'))===false){alert('You have not logged in')}
@@ -24,8 +24,13 @@ function Header(){
     
     useEffect(()=>{
         setIsLoggedIn(JSON.parse(localStorage.getItem('loggedIn')));
-        setIsLoggedIn(JSON.parse(localStorage.getItem('user')));
-    },[isLoggedIn])
+        // console.log(JSON.parse(localStorage.getItem('user')))
+        const loggedInUser= JSON.parse(localStorage.getItem('user'))
+        if(loggedInUser!==null){
+            setUserType(loggedInUser.type);
+        }
+        
+    },[])
     
     return (
        <>
@@ -37,30 +42,39 @@ function Header(){
 
           <div className="navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav">
-             <Link className="nav-link" to="/login">
+            { isLoggedIn===false &&  <Link className="nav-link" to="/login">
                 <p>Login</p>
              </Link>
-             <Link className="nav-link" to="/register">
+            }
+             {
+                isLoggedIn===false && <Link className="nav-link" to="/">
                 <p>Register</p>
-             </Link> 
-             <Link className="nav-link" to="/view-account">
+             </Link>
+             } 
+            { isLoggedIn===true && userType!=='admin' && <Link className="nav-link" to="/view-account">
                 <p>View Profile</p>
              </Link>
-             <Link className="nav-link" to="/update-account">
+            }
+             { isLoggedIn===true && userType!=='admin' && <Link className="nav-link" to="/update-account">
                 <p>Update Account</p>
              </Link>
-             <Link className="nav-link" to="/book-appointment">
+             }
+             { isLoggedIn===true && userType==='client' && <Link className="nav-link" to="/book-appointment">
                 <p>Book Appointment</p>
-             </Link>
-             <Link className="nav-link" to="/appointments">
+             </Link>}
+             { isLoggedIn===true && <Link className="nav-link" to="/appointments">
                 <p>Appointments</p>
              </Link>
-             <Link className="nav-link" to='/all-doctors'>
+             }
+             { isLoggedIn===true && userType==='admin' && <Link className="nav-link" to='/all-doctors'>
                 <p>Doctor Database</p>
              </Link>
-             <Link className="nav-link" to="/all-clients">
+             }
+             {
+                isLoggedIn===true && userType==='admin' && <Link className="nav-link" to="/all-clients">
                 <p>Client Database</p> 
              </Link>
+             }
             </div>
           </div>
         
